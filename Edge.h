@@ -6,22 +6,20 @@
 class Edge
 {
 private:
-    int id;
-    Vertex start;
-    Vertex end;
+    int idStart;
+    int idEnd;
     float weight;
 
 public:
     /* Constructor */
-    Edge(int id, const Vertex &start, const Vertex &end, float weight)
-        : id(id), start(start), end(end), weight(weight) {}
+    Edge(int idStart, int idEnd, float weight)
+        : idStart(idStart), idEnd(idEnd), weight(weight) {}
     ~Edge() = default;
 
     /* Getters */
-    int getId() const { return id; }
     float getWeight() const { return weight; }
-    Vertex getStart() const { return start; }
-    Vertex getEnd() const { return end; }
+    int getStartId() const { return idStart; }
+    int getEndId() const { return idEnd; }
 };
 
 #endif
