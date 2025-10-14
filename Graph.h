@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <string>
 #include "Vertex.h"
 #include "Edge.h"
 
@@ -13,8 +14,11 @@ private:
     std::unordered_map<int, std::vector<Edge>> adjacencyList;
 
 public:
-    Graph() = default;
-    ~Graph() = default;
+    /*
+        Constructor that initializes the graph from a given file name.
+        The file is expected to contain vertex and edge definitions.
+    */
+    Graph(const std::string &filename);
 
     /*
         Adds a vertex to the graph.
@@ -27,9 +31,10 @@ public:
     void addEdge(const Edge &edge);
 
     /*
-        Returns a list of edges (neighbors) connected to the given vertex ID.
+        Returns the list of edges (neighbors) connected to the given vertex ID.
+        Note: returns a const reference to avoid copying potentially large neighbor lists.
     */
-    std::vector<Edge> getNeighbors(int vertexId) const;
+    const std::vector<Edge> &getNeighbors(int vertexId) const;
 };
 
 #endif
