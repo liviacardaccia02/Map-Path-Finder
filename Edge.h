@@ -1,8 +1,6 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-#include "Vertex.h"
-
 class Edge
 {
 private:
