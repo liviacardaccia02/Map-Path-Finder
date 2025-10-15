@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
         int testVertexId = 86771;
         const std::vector<Edge> &neighbors = graph.getNeighbors(testVertexId);
         std::cout << "Neighbors of vertex " << testVertexId << ":" << std::endl;
-        for (const Edge &edge : neighbors)
-        {
-            std::cout << "Edge to " << edge.getEndId() << " with weight " << edge.getWeight() << std::endl;
-        }
+        // for (const Edge &edge : neighbors)
+        // {
+        //     std::cout << "Edge to " << edge.getEndId() << " with weight " << edge.getWeight() << std::endl;
+        // }
     }
     catch (const std::runtime_error &e)
     {

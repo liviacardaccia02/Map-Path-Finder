@@ -1,6 +1,7 @@
 #include "Graph.h"
 #include "Vertex.h"
 #include "Edge.h"
+#include "utils.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -8,69 +9,54 @@
 
 Graph::Graph(const std::string &filename)
 {
-    std::ifstream file(filename); // Apri il file
+    std::ifstream file(filename);
     if (!file.is_open())
     {
         throw std::runtime_error("Error: could not open file " + filename);
     }
 
-    int vertexCount = 0; // TODO rimuovere
-    int edgeCount = 0;   // TODO rimuovere
-
+    int vertexCount = 0;
+    int edgeCount = 0;
     std::string line;
+
     while (std::getline(file, line))
     {
-        std::stringstream ss(line);
-        std::string token;
+        if (line.empty() || line[0] == '#')
+            continue; // skip empty lines or comments
 
-        if (std::getline(ss, token, ','))
+        std::string_view sv(line);
+        char type = sv.front();
+        sv.remove_prefix(2); // remove "V," or "E,"
+
+        if (type == 'V')
         {
-            std::cout << "Token: " << token << std::endl; // TODO rimuovere
-            if (token == "V")                             // Vertex
-            {
-                int id;
-                double longitude, latitude;
-                if (ss >> id >> longitude >> latitude)
-                {
-                    Vertex v(id, latitude, longitude);
-                    addVertex(v);
-                    vertexCount++; // TODO rimuovere
-                    std::cout << "Aggiunto vertice " << id << std::endl;
-                }
-                else
-                {
-                    std::cout << "Parsing vertice fallito per linea: " << line << std::endl;
-                }
-            }
-            else if (token == "E") // Edge
-            {
-                int fromId, toId;
-                double length;
-                std::string rest;
-                if (std::getline(ss, rest))
-                { // Leggi il resto della riga
-                    std::stringstream ssRest(rest);
-                    if (ssRest >> fromId >> toId >> length)
-                    {
-                        std::string name;
-                        std::getline(ssRest, name); // Ignora il nome se presente
-                        Edge e(fromId, toId, length);
-                        addEdge(e);
-                        edgeCount++;
-                        std::cout << "Aggiunto edge da " << fromId << " a " << toId << std::endl;
-                    }
-                    else
-                    {
-                        // std::cout << "Parsing edge fallito per linea: " << line << std::endl;
-                    }
-                }
-            }
+            int id;
+            double longitude, latitude;
+
+            id = std::stoi(std::string(utils::nextField(sv)));
+            longitude = std::stod(std::string(utils::nextField(sv)));
+            latitude = std::stod(std::string(utils::nextField(sv)));
+
+            Vertex v(id, longitude, latitude);
+            addVertex(v);
+            vertexCount++;
+        }
+        else if (type == 'E')
+        {
+            int idStart, idEnd;
+            double weight;
+
+            idStart = std::stoi(std::string(utils::nextField(sv)));
+            idEnd = std::stoi(std::string(utils::nextField(sv)));
+            weight = std::stod(std::string(utils::nextField(sv)));
+
+            Edge e(idStart, idEnd, weight);
+            addEdge(e);
+            edgeCount++;
         }
     }
 
-    // TODO rimuovere
     std::cout << "Loaded " << vertexCount << " vertices and " << edgeCount << " edges.\n";
-
     file.close();
 }
 
