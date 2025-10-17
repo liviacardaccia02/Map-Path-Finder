@@ -67,6 +67,16 @@ void Graph::addVertex(const Vertex &vertex)
 
 void Graph::addEdge(const Edge &edge)
 {
+    int startId = edge.getStartId();
+    int endId = edge.getEndId();
+    if (vertices.find(startId) == vertices.end() || vertices.find(endId) == vertices.end())
+    {
+        throw std::runtime_error("Edge connects to non-existent vertex"); // TODO better error handling
+    }
+    adjacencyList[startId].push_back(edge);
+}
+void Graph::addEdge(const Edge &edge)
+{
     adjacencyList[edge.getStartId()].push_back(edge);
 }
 
