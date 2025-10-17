@@ -12,14 +12,13 @@ int main(int argc, char *argv[])
     try
     {
         Graph graph(filename);
-        // Aggiungi codice per testare (es. stampa vicini di 86771)
-        int testVertexId = 86771;
-        const std::vector<Edge> &neighbors = graph.getNeighbors(testVertexId);
+        int testVertexId = 86794;
+        const std::vector<Edge> &neighbors = graph.getNeighbors(86794);
         std::cout << "Neighbors of vertex " << testVertexId << ":" << std::endl;
-        // for (const Edge &edge : neighbors)
-        // {
-        //     std::cout << "Edge to " << edge.getEndId() << " with weight " << edge.getWeight() << std::endl;
-        // }
+        for (const Edge &edge : neighbors)
+        {
+            std::cout << "  Edge to vertex " << edge.getEndId() << " with weight " << edge.getWeight() << std::endl;
+        }
     }
     catch (const std::runtime_error &e)
     {
