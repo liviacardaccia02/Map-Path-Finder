@@ -34,14 +34,17 @@ std::pair<double, double> utils::mediumPoint(const Graph &graph)
 
 std::pair<std::pair<double, double>, std::pair<double, double>> utils::mercatorProjection(const Graph &graph, const Vertex &v1, const Vertex &v2)
 {
-    int scale = 111000; // Approximate scale factor for converting degrees to meters
     double midLatitude = utils::mediumPoint(graph).first;
     double midLongitude = utils::mediumPoint(graph).second;
 
-    double x1 = scale * (v1.getLongitude() - midLongitude) * cos(midLatitude * M_PI / 180.0);
-    double y1 = scale * (v1.getLatitude() - midLatitude) * cos(midLatitude * M_PI / 180.0);
-    double x2 = scale * (v2.getLongitude() - midLongitude) * cos(midLatitude * M_PI / 180.0);
-    double y2 = scale * (v2.getLatitude() - midLatitude) * cos(midLatitude * M_PI / 180.0);
+    // Approximate scale factors for converting degrees to meters
+    int scale_y = 111000 * 0.88;
+    int scale_x = scale_y * cos(midLatitude * M_PI / 180);
+
+    double x1 = scale_x * (v1.getLongitude() - midLongitude);
+    double y1 = scale_y * (v1.getLatitude() - midLatitude);
+    double x2 = scale_x * (v2.getLongitude() - midLongitude);
+    double y2 = scale_y * (v2.getLatitude() - midLatitude);
 
     return std::pair<std::pair<double, double>, std::pair<double, double>>(std::make_pair(x1, y1), std::make_pair(x2, y2));
 }
