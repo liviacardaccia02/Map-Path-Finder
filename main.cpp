@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-    uint32_t start = 0, end = 0;
+    std::string start = "", end = "";
     std::string algorithm;
     std::string filename;
 
@@ -13,9 +13,9 @@ int main(int argc, char *argv[])
     {
         std::string arg = argv[i];
         if (arg == "--start" && i + 1 < argc)
-            start = std::stoul(argv[++i]);
+            start = argv[++i];
         else if (arg == "--end" && i + 1 < argc)
-            end = std::stoul(argv[++i]);
+            end = argv[++i];
         else if (arg == "--algorithm" && i + 1 < argc)
             algorithm = argv[++i];
         else if (arg == "--file" && i + 1 < argc)
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     }
 
     // Input validation
-    if (start == 0 || end == 0)
+    if (start == "" || end == "")
     {
         std::cerr << "Error: --start and --end are required." << std::endl;
         return 1;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
         if (algorithm == "bfs")
         {
-            algorithms::bfs(graph, start, end);
+            algorithms::bfs(graph, std::stoul(start), std::stoul(end));
         }
         else if (algorithm == "dijkstra")
         {

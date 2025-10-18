@@ -43,13 +43,16 @@ Graph::Graph(const std::string &filename)
         }
         else if (type == 'E')
         {
+            std::string parsedWeight;
             uint32_t idStart, idEnd;
             double weight;
 
             idStart = std::stoi(std::string(utils::nextField(sv)));
             idEnd = std::stoi(std::string(utils::nextField(sv)));
-            weight = std::stod(std::string(utils::nextField(sv)));
-
+            parsedWeight = std::string(utils::nextField(sv));
+            weight = parsedWeight.empty() ? utils::computeEuclideanDistance(*this, getVertex(idStart), getVertex(idEnd))
+                                          : std::stod(parsedWeight);
+            std::cout << "Computed weight for edge " << idStart << "->" << idEnd << " as " << weight << std::endl;
             Edge e(idStart, idEnd, weight);
             addEdge(e);
             edgeCount++;
@@ -92,4 +95,14 @@ const std::vector<Edge> &Graph::getNeighbors(uint32_t vertexId) const
     {
         return kEmpty;
     }
+}
+
+Vertex Graph::getVertex(uint32_t vertexId) const
+{
+    auto it = vertices.find(vertexId);
+    if (it != vertices.end())
+    {
+        return it->second;
+    }
+    throw std::runtime_error("Vertex not found");
 }

@@ -41,6 +41,12 @@ public:
         Note: returns a const reference to avoid copying potentially large neighbor lists.
     */
     const std::vector<Edge> &getNeighbors(uint32_t vertexId) const;
+
+    /*
+        Returns the vertex corresponding to the given vertex ID.
+        Throws an exception if the vertex does not exist.
+    */
+    Vertex getVertex(uint32_t vertexId) const;
 };
 
 #endif
