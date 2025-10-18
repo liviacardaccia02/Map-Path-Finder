@@ -56,7 +56,6 @@ Graph::Graph(const std::string &filename)
         }
     }
 
-    std::cout << "Loaded " << vertexCount << " vertices and " << edgeCount << " edges.\n";
     file.close();
 }
 
@@ -75,9 +74,10 @@ void Graph::addEdge(const Edge &edge)
     }
     adjacencyList[startId].push_back(edge);
 }
-void Graph::addEdge(const Edge &edge)
+
+const std::unordered_map<uint32_t, Vertex> &Graph::getVertices() const
 {
-    adjacencyList[edge.getStartId()].push_back(edge);
+    return vertices;
 }
 
 const std::vector<Edge> &Graph::getNeighbors(uint32_t vertexId) const

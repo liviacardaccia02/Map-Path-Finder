@@ -32,6 +32,11 @@ public:
     void addEdge(const Edge &edge);
 
     /*
+        Returns the map of vertices in the graph.
+    */
+    const std::unordered_map<uint32_t, Vertex> &getVertices() const;
+
+    /*
         Returns the list of edges (neighbors) connected to the given vertex ID.
         Note: returns a const reference to avoid copying potentially large neighbor lists.
     */
