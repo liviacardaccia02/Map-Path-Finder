@@ -1,19 +1,21 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
+#include <cstdint>
+
 class Vertex
 {
 private:
-    int id;
+    uint32_t id;
     double longitude, latitude;
 
 public:
     /* Constructor */
-    Vertex(int id, double longitude, double latitude) : id(id), longitude(longitude), latitude(latitude) {}
+    Vertex(uint32_t id, double longitude, double latitude) : id(id), longitude(longitude), latitude(latitude) {}
     ~Vertex() = default;
 
     /* Getters */
-    int getId() const { return id; }
+    uint32_t getId() const { return id; }
     double getLongitude() const { return longitude; }
     double getLatitude() const { return latitude; }
 };

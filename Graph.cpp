@@ -30,7 +30,7 @@ Graph::Graph(const std::string &filename)
 
         if (type == 'V')
         {
-            int id;
+            uint32_t id;
             double longitude, latitude;
 
             id = std::stoi(std::string(utils::nextField(sv)));
@@ -43,7 +43,7 @@ Graph::Graph(const std::string &filename)
         }
         else if (type == 'E')
         {
-            int idStart, idEnd;
+            uint32_t idStart, idEnd;
             double weight;
 
             idStart = std::stoi(std::string(utils::nextField(sv)));
@@ -67,8 +67,8 @@ void Graph::addVertex(const Vertex &vertex)
 
 void Graph::addEdge(const Edge &edge)
 {
-    int startId = edge.getStartId();
-    int endId = edge.getEndId();
+    uint32_t startId = edge.getStartId();
+    uint32_t endId = edge.getEndId();
     if (vertices.find(startId) == vertices.end() || vertices.find(endId) == vertices.end())
     {
         throw std::runtime_error("Edge connects to non-existent vertex"); // TODO better error handling
@@ -80,7 +80,7 @@ void Graph::addEdge(const Edge &edge)
     adjacencyList[edge.getStartId()].push_back(edge);
 }
 
-const std::vector<Edge> &Graph::getNeighbors(int vertexId) const
+const std::vector<Edge> &Graph::getNeighbors(uint32_t vertexId) const
 {
     static const std::vector<Edge> kEmpty;
     auto it = adjacencyList.find(vertexId);
