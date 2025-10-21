@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         }
         else if (algorithm == "dijkstra")
         {
-            std::cout << "Dijkstra not implemented yet." << std::endl;
+            algorithms::dijkstra(graph, std::stoul(start), std::stoul(end));
         }
         else if (algorithm == "astar")
         {
