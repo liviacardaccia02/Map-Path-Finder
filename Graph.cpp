@@ -18,9 +18,12 @@ Graph::Graph(const std::string &filename)
     int vertexCount = 0;
     int edgeCount = 0;
     std::string line;
+    int lineNumber = 0;
 
     while (std::getline(file, line))
     {
+        lineNumber++;
+
         if (line.empty() || line[0] == '#')
             continue; // skip empty lines or comments
 
@@ -33,9 +36,25 @@ Graph::Graph(const std::string &filename)
             uint32_t id;
             double longitude, latitude;
 
-            id = std::stoi(std::string(utils::nextField(sv)));
-            longitude = std::stod(std::string(utils::nextField(sv)));
-            latitude = std::stod(std::string(utils::nextField(sv)));
+            try
+            {
+                id = std::stoi(std::string(utils::nextField(sv)));
+                longitude = std::stod(std::string(utils::nextField(sv)));
+                latitude = std::stod(std::string(utils::nextField(sv)));
+            }
+            catch (const std::invalid_argument &e)
+            {
+                throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                         ": Invalid number format in vertex definition (possibly due to comments or malformed data).\n" +
+                                         "Line content: " + line + "\n" +
+                                         "Hint: Check for inline comments (//) or non-numeric characters.");
+            }
+            catch (const std::out_of_range &e)
+            {
+                throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                         ": Number out of range in vertex definition.\n" +
+                                         "Line content: " + line);
+            }
 
             Vertex v(id, longitude, latitude);
             addVertex(v);
@@ -47,12 +66,28 @@ Graph::Graph(const std::string &filename)
             uint32_t idStart, idEnd;
             double weight;
 
-            idStart = std::stoi(std::string(utils::nextField(sv)));
-            idEnd = std::stoi(std::string(utils::nextField(sv)));
-            parsedWeight = std::string(utils::nextField(sv));
-            weight = parsedWeight.empty() ? utils::computeEuclideanDistance(*this, getVertex(idStart), getVertex(idEnd))
-                                          : std::stod(parsedWeight);
-            std::cout << "Computed weight for edge " << idStart << "->" << idEnd << " as " << weight << std::endl;
+            try
+            {
+                idStart = std::stoi(std::string(utils::nextField(sv)));
+                idEnd = std::stoi(std::string(utils::nextField(sv)));
+                parsedWeight = std::string(utils::nextField(sv));
+                weight = parsedWeight.empty() ? utils::computeEuclideanDistance(*this, getVertex(idStart), getVertex(idEnd))
+                                              : std::stod(parsedWeight);
+            }
+            catch (const std::invalid_argument &e)
+            {
+                throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                         ": Invalid number format in edge definition (possibly due to comments or malformed data).\n" +
+                                         "Line content: " + line + "\n" +
+                                         "Hint: Check for inline comments (//) or non-numeric characters.");
+            }
+            catch (const std::out_of_range &e)
+            {
+                throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                         ": Number out of range in edge definition.\n" +
+                                         "Line content: " + line);
+            }
+
             Edge e(idStart, idEnd, weight);
             addEdge(e);
             edgeCount++;
@@ -105,4 +140,8 @@ Vertex Graph::getVertex(uint32_t vertexId) const
         return it->second;
     }
     throw std::runtime_error("Vertex not found");
+}
+
+void Graph::maximizeWeights()
+{
 }
