@@ -71,8 +71,8 @@ Graph::Graph(const std::string &filename)
                 idStart = std::stoi(std::string(utils::nextField(sv)));
                 idEnd = std::stoi(std::string(utils::nextField(sv)));
                 parsedWeight = std::string(utils::nextField(sv));
-                weight = parsedWeight.empty() ? utils::computeEuclideanDistance(*this, getVertex(idStart), getVertex(idEnd))
-                                              : std::stod(parsedWeight);
+                weight = parsedWeight.empty() || parsedWeight == "0" ? utils::computeEuclideanDistance(*this, getVertex(idStart), getVertex(idEnd))
+                                                                     : std::stod(parsedWeight);
             }
             catch (const std::invalid_argument &e)
             {
@@ -108,7 +108,7 @@ void Graph::addEdge(const Edge &edge)
     uint32_t endId = edge.getEndId();
     if (vertices.find(startId) == vertices.end() || vertices.find(endId) == vertices.end())
     {
-        throw std::runtime_error("Edge connects to non-existent vertex"); // TODO better error handling
+        throw std::runtime_error("Edge connects to non-existent vertex");
     }
     adjacencyList[startId].push_back(edge);
 }
@@ -140,8 +140,4 @@ Vertex Graph::getVertex(uint32_t vertexId) const
         return it->second;
     }
     throw std::runtime_error("Vertex not found");
-}
-
-void Graph::maximizeWeights()
-{
 }
