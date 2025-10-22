@@ -6,21 +6,29 @@
 
 namespace utils
 {
-    /* Extract the next field from a comma-separated line */
+    /* Extract the next field from a comma-separated line. */
     std::string_view nextField(std::string_view &line);
 
-    /* Calculate the medium point (average latitude and longitude) of all vertices in the graph
-     * returns a pair of (mediumLatitude, mediumLongitude)
+    /*
+     * Calculate the medium point (average latitude and longitude) of all vertices in the graph
+     * returns a pair of (mediumLatitude, mediumLongitude).
      */
     std::pair<double, double> mediumPoint(const Graph &graph);
 
-    /* Perform local Mercator projection for two vertices in the graph
-     *  returns the projected coordinates as a pair of ((x1, y1), (x2, y2))
+    /*
+     * Perform local Mercator projection for two vertices in the graph
+     * returns the projected coordinates as a pair of ((x1, y1), (x2, y2)).
      */
     std::pair<std::pair<double, double>, std::pair<double, double>> mercatorProjection(const Graph &graph, const Vertex &vertex1, const Vertex &vertex2);
 
-    /* Compute the Euclidean distance between two vertices */
+    /* Compute the Euclidean distance between two vertices. */
     double computeEuclideanDistance(const Graph &graph, const Vertex &v1, const Vertex &v2);
+
+    /*
+     * Heuristic function for A* algorithm: estimates the cost from current to goal vertex
+     * by using the Harvesine formula.
+     */
+    double haversineDistance(const Vertex &current, const Vertex &goal);
 }
 
 #endif
