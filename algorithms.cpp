@@ -61,7 +61,7 @@ void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVer
                 std::reverse(path.begin(), path.end());
 
                 // Output formatting
-                std::cout << "Total visited vertex = " << visitedCount << std::endl;
+                std::cout << "Total visited vertexes = " << visitedCount << std::endl;
                 std::cout << "Total vertices on path from start to end = " << path.size() << std::endl;
                 for (size_t i = 0; i < path.size(); ++i)
                 {
@@ -96,7 +96,7 @@ void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVer
                 }
             }
         }
-        std::cout << "Total visited vertex = " << visitedCount << std::endl;
+        std::cout << "Total visited vertexes = " << visitedCount << std::endl;
         std::cout << "No path found from vertex " << startVertexId << " to vertex " << endVertexId << ".\n"
                   << std::endl;
         return;
@@ -206,7 +206,7 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
             std::reverse(path.begin(), path.end()); // Reverse to get path from start to end.
 
             // Output formatting: show visited count, path size, and each vertex with its cumulative distance.
-            std::cout << "Total visited vertex = " << visitedCount << std::endl;
+            std::cout << "Total visited vertexes = " << visitedCount << std::endl;
             std::cout << "Total vertices on path from start to end = " << path.size() << std::endl;
             for (size_t i = 0; i < path.size(); ++i)
             {
@@ -322,7 +322,7 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
             }
             std::reverse(path.begin(), path.end());
 
-            std::cout << "Total visited vertex = " << visitedCount << std::endl;
+            std::cout << "Total visited vertexes = " << visitedCount << std::endl;
             std::cout << "Total vertices on path from start to end = " << path.size() << std::endl;
             for (size_t i = 0; i < path.size(); ++i)
             {
