@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         }
         else if (algorithm == "astar")
         {
-            std::cout << "A* not implemented yet." << std::endl;
+            algorithms::aStar(graph, std::stoul(start), std::stoul(end));
         }
         else
         {
