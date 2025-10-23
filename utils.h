@@ -28,7 +28,7 @@ namespace utils
      * Heuristic function for A* algorithm: estimates the cost from current to goal vertex
      * by using the Harvesine formula.
      */
-    double haversineDistance(const Vertex &current, const Vertex &goal);
+    double computeHaversineDistance(const Vertex &current, const Vertex &goal);
 }
 
 #endif

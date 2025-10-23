@@ -57,7 +57,7 @@ double utils::computeEuclideanDistance(const Graph &graph, const Vertex &v1, con
     return std::sqrt(dx * dx + dy * dy);
 }
 
-double utils::haversineDistance(const Vertex &v1, const Vertex &v2)
+double utils::computeHaversineDistance(const Vertex &v1, const Vertex &v2)
 {
     double radius = 6371000.0; // Radius of the Earth in meters
 
