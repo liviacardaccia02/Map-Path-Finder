@@ -10,7 +10,7 @@ private:
     double weight;
 
 public:
-    /* Constructor */
+    /* Constructor & destructur */
     Edge(uint32_t idStart, uint32_t idEnd, double weight)
         : idStart(idStart), idEnd(idEnd), weight(weight) {}
     ~Edge() = default;

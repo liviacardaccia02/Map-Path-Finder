@@ -10,7 +10,7 @@ private:
     double longitude, latitude;
 
 public:
-    /* Constructor */
+    /* Constructor & destructor */
     Vertex(uint32_t id, double longitude, double latitude) : id(id), longitude(longitude), latitude(latitude) {}
     ~Vertex() = default;
 
