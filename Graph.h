@@ -22,6 +22,11 @@ public:
     Graph(const std::string &filename);
 
     /*
+        Virtual destructor.
+    */
+    virtual ~Graph() = default;
+
+    /*
         Adds a vertex to the graph.
     */
     void addVertex(const Vertex &vertex);
@@ -37,6 +42,11 @@ public:
     const std::unordered_map<uint32_t, Vertex> &getVertices() const;
 
     /*
+        Returns the adjacency list of the graph.
+    */
+    const std::unordered_map<uint32_t, std::vector<Edge>> &getAdjacencyList() const;
+
+    /*
         Returns the list of edges (neighbors) connected to the given vertex ID.
         Note: returns a const reference to avoid copying potentially large neighbor lists.
     */
@@ -47,6 +57,12 @@ public:
         Throws an exception if the vertex does not exist.
     */
     Vertex getVertex(uint32_t vertexId) const;
+
+    /*
+        Virtual method to draw the path on the graph.
+        This method can be overridden in derived classes for graphical representation.
+    */
+    virtual void drawPath(const std::vector<uint32_t> &path) const;
 };
 
 #endif

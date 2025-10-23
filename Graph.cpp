@@ -118,6 +118,11 @@ const std::unordered_map<uint32_t, Vertex> &Graph::getVertices() const
     return vertices;
 }
 
+const std::unordered_map<uint32_t, std::vector<Edge>> &Graph::getAdjacencyList() const
+{
+    return adjacencyList;
+}
+
 const std::vector<Edge> &Graph::getNeighbors(uint32_t vertexId) const
 {
     static const std::vector<Edge> kEmpty;
@@ -140,4 +145,8 @@ Vertex Graph::getVertex(uint32_t vertexId) const
         return it->second;
     }
     throw std::runtime_error("Vertex not found");
+}
+
+void Graph::drawPath(const std::vector<uint32_t> &path) const
+{
 }
