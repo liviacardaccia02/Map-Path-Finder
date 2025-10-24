@@ -21,20 +21,25 @@ public:
     */
     Graph(const std::string &filename);
 
-    /*
-        Virtual destructor.
-    */
-    virtual ~Graph() = default;
+    /**
+     * Helper method to initialize the graph from a file.
+     * @param filename The name of the file containing the graph data.
+     */
+    virtual void initializeFromFile(const std::string &filename);
 
-    /*
-        Adds a vertex to the graph.
-    */
-    void addVertex(const Vertex &vertex);
+    /**
+     * Virtual method to add a vertex to the graph.
+     * This method can be overridden in derived classes for additional functionality.
+     * @param vertex The vertex to be added.
+     */
+    virtual void addVertex(const Vertex &vertex);
 
-    /*
-        Adds an edge to the graph.
-    */
-    void addEdge(const Edge &edge);
+    /**
+     * Virtual method to add an edge to the graph.
+     * This method can be overridden in derived classes for additional functionality.
+     * @param edge The edge to be added.
+     */
+    virtual void addEdge(const Edge &edge);
 
     /*
         Returns the map of vertices in the graph.
@@ -63,6 +68,11 @@ public:
         This method can be overridden in derived classes for graphical representation.
     */
     virtual void drawPath(const std::vector<uint32_t> &path) const;
+
+    /*
+        Virtual destructor.
+    */
+    virtual ~Graph() = default;
 };
 
 #endif

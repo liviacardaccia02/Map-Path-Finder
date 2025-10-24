@@ -9,6 +9,12 @@
 
 Graph::Graph(const std::string &filename)
 {
+    initializeFromFile(filename);
+}
+
+void Graph::initializeFromFile(const std::string &filename)
+{
+    std::cout << "Creating Graph from file: " << filename << "\n";
     std::ifstream file(filename);
     if (!file.is_open())
     {
@@ -99,11 +105,13 @@ Graph::Graph(const std::string &filename)
 
 void Graph::addVertex(const Vertex &vertex)
 {
+    // std::cout << "Adding vertex " << vertex.getId() << " to Graph\n";
     vertices.insert_or_assign(vertex.getId(), vertex);
 }
 
 void Graph::addEdge(const Edge &edge)
 {
+    // std::cout << "Adding edge " << edge.getStartId() << " -> " << edge.getEndId() << " to Graph\n";
     uint32_t startId = edge.getStartId();
     uint32_t endId = edge.getEndId();
     if (vertices.find(startId) == vertices.end() || vertices.find(endId) == vertices.end())
@@ -149,4 +157,5 @@ Vertex Graph::getVertex(uint32_t vertexId) const
 
 void Graph::drawPath(const std::vector<uint32_t> &path) const
 {
+    std::cout << "Drawing path in Graph (no graphical representation available)\n";
 }
