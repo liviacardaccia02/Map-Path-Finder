@@ -6,6 +6,26 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
+void runAlgorithm(const std::string &algorithm, const Graph &graph, uint32_t startId, uint32_t endId)
+{
+    if (algorithm == "bfs")
+    {
+        algorithms::bfs(graph, startId, endId);
+    }
+    else if (algorithm == "dijkstra")
+    {
+        algorithms::dijkstra(graph, startId, endId);
+    }
+    else if (algorithm == "astar")
+    {
+        algorithms::aStar(graph, startId, endId);
+    }
+    else
+    {
+        std::cerr << "Error: Unknown algorithm '" << algorithm << "'. Use bfs, dijkstra, or astar." << std::endl;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     std::string start = "", end = "";
@@ -62,26 +82,11 @@ int main(int argc, char *argv[])
         {
             Graph graph(filename);
 
-            if (algorithm == "bfs")
-            {
-                algorithms::bfs(graph, std::stoul(start), std::stoul(end));
-            }
-            else if (algorithm == "dijkstra")
-            {
-                algorithms::dijkstra(graph, std::stoul(start), std::stoul(end));
-            }
-            else if (algorithm == "astar")
-            {
-                algorithms::aStar(graph, std::stoul(start), std::stoul(end));
-            }
-            else
-            {
-                std::cerr << "Error: Unknown algorithm '" << algorithm << "'. Use bfs, dijkstra, or astar." << std::endl;
-                return 1;
-            }
+            runAlgorithm(algorithm, graph, std::stoul(start), std::stoul(end));
+
             return 0;
         }
-        else
+        else if (mode == "graphic")
         {
             std::cout << "Starting graphical mode...\n";
             QApplication app(argc, argv);
@@ -89,21 +94,16 @@ int main(int argc, char *argv[])
             QGraphicsView *view = new QGraphicsView(scene);
 
             GraphicGraph graph(filename, scene);
-            if (algorithm == "bfs")
-            {
-                algorithms::bfs(graph, std::stoul(start), std::stoul(end));
-            }
-            else if (algorithm == "dijkstra")
-            {
-                algorithms::dijkstra(graph, std::stoul(start), std::stoul(end));
-            }
-            else if (algorithm == "astar")
-            {
-                algorithms::aStar(graph, std::stoul(start), std::stoul(end));
-            }
+
+            runAlgorithm(algorithm, graph, std::stoul(start), std::stoul(end));
 
             view->show();
             return app.exec();
+        }
+        else
+        {
+            std::cerr << "Error: Unknown mode '" << mode << "'. Use 'text' or 'graphic'." << std::endl;
+            return 1;
         }
     }
     catch (const std::runtime_error &e)
