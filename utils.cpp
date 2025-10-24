@@ -19,7 +19,7 @@ std::string_view utils::nextField(std::string_view &line)
 
 std::pair<double, double> utils::mediumPoint(const Graph &graph)
 {
-    double sumLat, sumLong = 0.0;
+    double sumLat = 0.0, sumLong = 0.0;
     size_t count = 0;
 
     for (const auto &pair : graph.getVertices())
@@ -34,12 +34,13 @@ std::pair<double, double> utils::mediumPoint(const Graph &graph)
 
 std::pair<std::pair<double, double>, std::pair<double, double>> utils::mercatorProjection(const Graph &graph, const Vertex &v1, const Vertex &v2)
 {
-    double midLatitude = utils::mediumPoint(graph).first;
-    double midLongitude = utils::mediumPoint(graph).second;
+    auto mid = utils::mediumPoint(graph);
+    double midLatitude = mid.first;
+    double midLongitude = mid.second;
 
     // Approximate scale factors for converting degrees to meters
-    int scale_y = 111000 * 0.88;
-    int scale_x = scale_y * cos(midLatitude * M_PI / 180);
+    double scale_y = 111000.0 * 0.88; // meters per degree (approx)
+    double scale_x = scale_y * std::cos(midLatitude * M_PI / 180.0);
 
     double x1 = scale_x * (v1.getLongitude() - midLongitude);
     double y1 = scale_y * (v1.getLatitude() - midLatitude);
