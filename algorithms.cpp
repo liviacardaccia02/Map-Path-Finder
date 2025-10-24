@@ -1,5 +1,6 @@
 #include "algorithms.h"
 #include "utils.h"
+#include "GraphicGraph.h"
 #include <iomanip>
 #include <algorithm>
 #include <queue>
@@ -36,7 +37,8 @@ void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVer
         queue.push(startVertexId);
         visited.insert(startVertexId);
 
-        // Initialize parent and distance for the start vertex - std::numeric_limits<uint32_t>::max() is used since the vertices ID are uint32_t
+        // Initialize parent and distance for the start vertex
+        // std::numeric_limits<uint32_t>::max() is used since the vertices ID are uint32_t
         parent[startVertexId] = std::numeric_limits<uint32_t>::max(); // No parent for start vertex
         distance[startVertexId] = 0.0;
 
@@ -51,22 +53,22 @@ void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVer
             if (current == endVertexId)
             {
                 // Reconstruct the path from end to start using the parent map
-                std::vector<std::pair<uint32_t, double>> path;
+                std::vector<uint32_t> path;
                 uint32_t step = endVertexId;
                 while (step != std::numeric_limits<uint32_t>::max())
                 {
-                    path.push_back({step, distance[step]});
+                    path.push_back(step);
                     step = parent[step];
                 }
                 std::reverse(path.begin(), path.end());
 
                 // Output formatting
-                std::cout << "Total visited vertexes = " << visitedCount << std::endl;
+                std::cout << "Total visited vertices = " << visitedCount << std::endl;
                 std::cout << "Total vertices on path from start to end = " << path.size() << std::endl;
                 for (size_t i = 0; i < path.size(); ++i)
                 {
-                    std::cout << "Vertex[" << std::setw(4) << (i + 1) << "] : id = " << std::setw(8) << path[i].first
-                              << ", length = " << std::fixed << std::setprecision(2) << path[i].second << std::endl;
+                    std::cout << "Vertex[" << std::setw(4) << (i + 1) << "] : id = " << std::setw(8) << path[i]
+                              << ", length = " << std::fixed << std::setprecision(2) << distance[path[i]] << std::endl;
                 }
 
                 auto end = std::chrono::steady_clock::now();
@@ -77,7 +79,7 @@ void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVer
                     timeStr.insert(timeStr.length() - 3, ",");
                 }
                 std::cout << "INFO: path calculated in " << timeStr << "us" << std::endl;
-
+                graph.drawPath(path);
                 return;
             }
 
@@ -96,7 +98,7 @@ void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVer
                 }
             }
         }
-        std::cout << "Total visited vertexes = " << visitedCount << std::endl;
+        std::cout << "Total visited vertices = " << visitedCount << std::endl;
         std::cout << "No path found from vertex " << startVertexId << " to vertex " << endVertexId << ".\n"
                   << std::endl;
         return;
@@ -184,7 +186,7 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
 
         // Reconstruct the shortest path from endVertexId to startVertexId using the 'previous' map.
         double shortestDistance = distance[endVertexId];
-        std::vector<std::pair<uint32_t, double>> path;
+        std::vector<uint32_t> path;
         if (shortestDistance == std::numeric_limits<double>::infinity())
         {
             // No path found if the shortest distance is infinity.
@@ -200,18 +202,18 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
             uint32_t u = endVertexId;
             while (u != std::numeric_limits<uint32_t>::max())
             {
-                path.push_back({u, distance[u]});
+                path.push_back(u);
                 u = previous[u];
             }
             std::reverse(path.begin(), path.end()); // Reverse to get path from start to end.
 
-            // Output formatting: show visited count, path size, and each vertex with its cumulative distance.
-            std::cout << "Total visited vertexes = " << visitedCount << std::endl;
+            // Output formatting
+            std::cout << "Total visited vertices = " << visitedCount << std::endl;
             std::cout << "Total vertices on path from start to end = " << path.size() << std::endl;
             for (size_t i = 0; i < path.size(); ++i)
             {
-                std::cout << "Vertex[" << std::setw(4) << (i + 1) << "] : id = " << std::setw(8) << path[i].first
-                          << ", length = " << std::fixed << std::setprecision(2) << path[i].second << std::endl;
+                std::cout << "Vertex[" << std::setw(4) << (i + 1) << "] : id = " << std::setw(8) << path[i]
+                          << ", length = " << std::fixed << std::setprecision(2) << distance[path[i]] << std::endl;
             }
 
             auto end = std::chrono::steady_clock::now();
@@ -222,7 +224,7 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
                 timeStr.insert(timeStr.length() - 3, ",");
             }
             std::cout << "INFO: path calculated in " << timeStr << "us" << std::endl;
-
+            graph.drawPath(path);
             return;
         }
     }
@@ -230,7 +232,7 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
 
 double heuristic(const Vertex &current, const Vertex &goal)
 {
-    return utils::haversineDistance(current, goal);
+    return utils::computeHaversineDistance(current, goal);
 }
 
 void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goalVertexId)
@@ -322,7 +324,7 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
             }
             std::reverse(path.begin(), path.end());
 
-            std::cout << "Total visited vertexes = " << visitedCount << std::endl;
+            std::cout << "Total visited vertices = " << visitedCount << std::endl;
             std::cout << "Total vertices on path from start to end = " << path.size() << std::endl;
             for (size_t i = 0; i < path.size(); ++i)
             {
@@ -338,7 +340,7 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
                 timeStr.insert(timeStr.length() - 3, ",");
             }
             std::cout << "INFO: path calculated in " << timeStr << "us" << std::endl;
-
+            graph.drawPath(path);
             return;
         }
     }
