@@ -6,7 +6,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <limits>
-// Qt drawing helpers
 #include <QPen>
 #include <QBrush>
 #include <QPointF>
@@ -16,8 +15,6 @@ GraphicGraph::GraphicGraph(const std::string &filename, QGraphicsScene *scene) :
                                                                                  minLon(std::numeric_limits<double>::max()), maxLon(std::numeric_limits<double>::lowest()),
                                                                                  minLat(std::numeric_limits<double>::max()), maxLat(std::numeric_limits<double>::lowest())
 {
-    std::cout << "GraphicGraph created with file: " << filename << "\n";
-    // Set scene background to black and a default scene rect so mapping fits in view
     if (graphicsScene)
     {
         graphicsScene->setBackgroundBrush(Qt::black);
@@ -32,6 +29,7 @@ GraphicGraph::GraphicGraph(const std::string &filename, QGraphicsScene *scene) :
 
 GraphicGraph::~GraphicGraph()
 {
+    Graph::~Graph();
     for (auto &item : vertexItems)
     {
         if (item.second)
@@ -46,7 +44,6 @@ GraphicGraph::~GraphicGraph()
 
 void GraphicGraph::initializeFromFile(const std::string &filename)
 {
-    std::cout << "Creating GraphicGraph from file: " << filename << "\n";
     std::ifstream file(filename);
     if (!file.is_open())
     {
@@ -110,7 +107,7 @@ void GraphicGraph::initializeFromFile(const std::string &filename)
                 idEnd = std::stoi(std::string(utils::nextField(sv)));
                 parsedWeight = std::string(utils::nextField(sv));
                 weight = parsedWeight.empty() || parsedWeight == "0" ? utils::computeEuclideanDistance(*this, getVertex(idStart), getVertex(idEnd))
-                                                                     : std::stod(parsedWeight); // TODO check for zero weight - sta effettivamente chiamando computeEuclideanDistance?
+                                                                     : std::stod(parsedWeight);
             }
             catch (const std::invalid_argument &e)
             {
@@ -137,8 +134,6 @@ void GraphicGraph::initializeFromFile(const std::string &filename)
 
 void GraphicGraph::addVertex(const Vertex &vertex)
 {
-    std::cout << "Adding vertex " << vertex.getId() << "in GraphicGraph\n";
-    // Ensure base Graph keeps the vertex record (keeps Graph::vertices in sync)
     Graph::addVertex(vertex);
 
     minLon = std::min(minLon, vertex.getLongitude());
@@ -160,18 +155,13 @@ void GraphicGraph::addVertex(const Vertex &vertex)
             item->setScale(itemScale);
             vertexItems[vertex.getId()] = item;
         }
-        std::cout << "Added vertex " << vertex.getId() << " at (" << x << ", " << y << ")\n";
     }
 }
 
 void GraphicGraph::addEdge(const Edge &edge)
 {
-    std::cout << "Adding edge " << edge.getStartId() << " -> " << edge.getEndId() << " in GraphicGraph\n";
-
-    // Keep graph data structures in sync
     Graph::addEdge(edge);
 
-    // Draw edge only if both vertex items exist
     if (!graphicsScene)
         return;
 
@@ -194,14 +184,13 @@ void GraphicGraph::addEdge(const Edge &edge)
     whitePen.setWidth(1);
     QGraphicsLineItem *line = graphicsScene->addLine(p1.x(), p1.y(), p2.x(), p2.y(), whitePen);
     edgeItems.push_back(line);
-    std::cout << "Added edge " << edge.getStartId() << " -> " << edge.getEndId() << "\n";
 }
 
 void GraphicGraph::drawPath(const std::vector<uint32_t> &path) const
 {
-    std::cout << "Drawing path in GraphicGraph\n";
     if (!graphicsScene || path.size() < 2)
         return;
+
     // Clear previous path items
     for (auto it : pathItems)
     {

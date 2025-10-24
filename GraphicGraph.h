@@ -16,12 +16,14 @@ public:
     /**
      * Helper method to initialize the graph from a file.
      * Extends the base class method for graphical setup.
+     *
      * @param filename The name of the file containing the graph data.
      */
     void initializeFromFile(const std::string &filename) override;
 
     /**
      * Adds a vertex to the graph and creates its graphical representation.
+     *
      * @param id The ID of the vertex.
      * @param longitude The longitude of the vertex.
      * @param latitude The latitude of the vertex.
@@ -30,6 +32,7 @@ public:
 
     /**
      * Adds an edge to the graph and creates its graphical representation.
+     *
      * @param idStart The starting vertex ID of the edge.
      * @param idEnd The ending vertex ID of the edge.
      * @param weight The weight of the edge.
@@ -38,11 +41,12 @@ public:
 
     /**
      * Draws the path on the graphics scene by highlighting the edges along the given path.
+     *
      * @param path A vector of vertex IDs representing the path to be drawn.
      */
     void drawPath(const std::vector<uint32_t> &path) const override;
 
-    // Simple programmatic zoom controls (scale items) — call from your view/controller
+    // Simple programmatic zoom controls (scale items)
     void zoomIn(double factor = 1.25);
     void zoomOut(double factor = 1.25);
     void setScale(double scale);
