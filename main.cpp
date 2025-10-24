@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
 
     try
     {
-        std::cout << "Starting in " << mode << " mode using algorithm: " << algorithm << "\n";
         if (mode == "text")
         {
             Graph graph(filename);
@@ -88,7 +87,6 @@ int main(int argc, char *argv[])
         }
         else if (mode == "graphic")
         {
-            std::cout << "Starting graphical mode...\n";
             QApplication app(argc, argv);
             QGraphicsScene *scene = new QGraphicsScene(-500, -500, 1000, 1000);
             QGraphicsView *view = new QGraphicsView(scene);
