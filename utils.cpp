@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <cmath>
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -32,7 +33,7 @@ std::pair<double, double> utils::mediumPoint(const Graph &graph)
     return count > 0 ? std::make_pair(sumLat / count, sumLong / count) : std::make_pair(0.0, 0.0);
 }
 
-std::pair<std::pair<double, double>, std::pair<double, double>> utils::mercatorProjection(const Graph &graph, const Vertex &v1, const Vertex &v2)
+std::tuple<double, double, double, double> utils::mercatorProjection(const Graph &graph, const Vertex &v1, const Vertex &v2)
 {
     auto mid = utils::mediumPoint(graph);
     double midLatitude = mid.first;
@@ -47,14 +48,14 @@ std::pair<std::pair<double, double>, std::pair<double, double>> utils::mercatorP
     double x2 = scale_x * (v2.getLongitude() - midLongitude);
     double y2 = scale_y * (v2.getLatitude() - midLatitude);
 
-    return std::pair<std::pair<double, double>, std::pair<double, double>>(std::make_pair(x1, y1), std::make_pair(x2, y2));
+    return std::make_tuple(x1, y1, x2, y2);
 }
 
 double utils::computeEuclideanDistance(const Graph &graph, const Vertex &v1, const Vertex &v2)
 {
-    auto [proj1, proj2] = mercatorProjection(graph, v1, v2);
-    double dx = proj1.first - proj2.first;
-    double dy = proj1.second - proj2.second;
+    auto [x1, y1, x2, y2] = mercatorProjection(graph, v1, v2);
+    double dx = x1 - x2;
+    double dy = y1 - y2;
     return std::sqrt(dx * dx + dy * dy);
 }
 

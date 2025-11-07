@@ -1,7 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <string_view>
 #include "Graph.h"
 
 namespace utils
@@ -24,14 +23,14 @@ namespace utils
 
     /**
      * @brief Performs local Mercator projection for two vertices in the graph
-     * returns the projected coordinates as a pair of ((x1, y1), (x2, y2)).
+     * returns the projected coordinates as a tuple of (x1, y1, x2, y2).
      *
      * @param graph The graph containing the vertices.
      * @param vertex1 The first vertex to project.
      * @param vertex2 The second vertex to project.
-     * @return A pair of projected coordinates.
+     * @return A tuple of projected coordinates.
      */
-    std::pair<std::pair<double, double>, std::pair<double, double>> mercatorProjection(const Graph &graph, const Vertex &vertex1, const Vertex &vertex2);
+    std::tuple<double, double, double, double> mercatorProjection(const Graph &graph, const Vertex &vertex1, const Vertex &vertex2);
 
     /**
      * @brief Computes the Euclidean distance between two vertices using their projected coordinates.
