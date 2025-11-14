@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <memory>
 
 void runAlgorithm(const std::string &algorithm, const Graph &graph, uint32_t startId, uint32_t endId)
 {
@@ -75,38 +76,62 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    uint32_t startId = 0, endId = 0;
     try
     {
-        if (mode == "text")
+        startId = std::stoul(start);
+        endId = std::stoul(end);
+    }
+    catch (const std::invalid_argument &)
+    {
+        std::cerr << "Error: --start and --end must be numeric vertex IDs." << std::endl;
+        return 1;
+    }
+    catch (const std::out_of_range &)
+    {
+        std::cerr << "Error: --start or --end value out of range." << std::endl;
+        return 1;
+    }
+
+    if (mode == "text")
+    {
+        try
         {
             Graph graph(filename);
-
-            runAlgorithm(algorithm, graph, std::stoul(start), std::stoul(end));
-
+            runAlgorithm(algorithm, graph, startId, endId);
             return 0;
         }
-        else if (mode == "graphic")
+        catch (const std::runtime_error &e)
         {
-            QApplication app(argc, argv);
-            QGraphicsScene *scene = new QGraphicsScene(-500, -500, 1000, 1000);
-            QGraphicsView *view = new QGraphicsView(scene);
-
-            GraphicGraph graph(filename, scene);
-
-            runAlgorithm(algorithm, graph, std::stoul(start), std::stoul(end));
-
-            view->show();
-            return app.exec();
-        }
-        else
-        {
-            std::cerr << "Error: Unknown mode '" << mode << "'. Use 'text' or 'graphic'." << std::endl;
+            std::cerr << e.what() << std::endl;
             return 1;
         }
     }
-    catch (const std::runtime_error &e)
+    else if (mode == "graphic")
     {
-        std::cerr << e.what() << std::endl;
+        QApplication app(argc, argv);
+
+        // create the scene before constructing GraphicGraph (it expects a valid scene pointer)
+        auto scene = std::make_unique<QGraphicsScene>(-500, -500, 1000, 1000);
+
+        try
+        {
+            GraphicGraph graph(filename, scene.get());
+            runAlgorithm(algorithm, graph, startId, endId);
+
+            QGraphicsView view(scene.get());
+            view.show();
+            return app.exec();
+        }
+        catch (const std::runtime_error &e)
+        {
+            std::cerr << e.what() << std::endl;
+            return 1;
+        }
+    }
+    else
+    {
+        std::cerr << "Error: Unknown mode '" << mode << "'. Use 'text' or 'graphic'." << std::endl;
         return 1;
     }
 }
