@@ -141,4 +141,3 @@ This project is distributed for educational purposes as part of the **ROBO4 C++ 
 ## 👩‍💻 Author
 **Livia Cardaccia**  
 C++ Developer & Robotics Engineering Student
-```
