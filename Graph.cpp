@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdexcept>
+#include <cmath>
 
 Graph::Graph(const std::string &filename)
 {
@@ -120,6 +121,11 @@ void Graph::addVertex(const Vertex &vertex)
 
 void Graph::addEdge(const Edge &edge)
 {
+    if (!std::isfinite(edge.getWeight()) || edge.getWeight() < 0.0)
+    {
+        throw std::runtime_error("Edge weight must be finite and non-negative");
+    }
+
     uint32_t startId = edge.getStartId();
     uint32_t endId = edge.getEndId();
     if (vertices.find(startId) == vertices.end() || vertices.find(endId) == vertices.end())
