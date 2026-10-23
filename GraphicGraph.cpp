@@ -11,7 +11,7 @@
 #include <QPointF>
 #include <QRectF>
 
-GraphicGraph::GraphicGraph(const std::string &filename, QGraphicsScene *scene) : Graph(filename), graphicsScene(scene),
+GraphicGraph::GraphicGraph(const std::string &filename, QGraphicsScene *scene) : Graph(), graphicsScene(scene),
                                                                                  minLon(std::numeric_limits<double>::max()), maxLon(std::numeric_limits<double>::lowest()),
                                                                                  minLat(std::numeric_limits<double>::max()), maxLat(std::numeric_limits<double>::lowest())
 {
