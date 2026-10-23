@@ -60,7 +60,7 @@ done
 # Same start and destination is a handled boundary case in the current CLI.
 for algorithm in bfs dijkstra astar; do
   output="$("$binary" --start 1 --end 1 --algorithm "$algorithm" --file "$fixtures/weighted_routes.csv" --mode text)"
-  assert_contains "$output" "Start and end" "$algorithm handles identical start and destination"
+  assert_contains "$output" "vertices are the same." "$algorithm handles identical start and destination"
   echo "PASS: $algorithm handles identical start and destination"
 done
 
