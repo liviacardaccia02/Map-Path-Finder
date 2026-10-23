@@ -220,9 +220,10 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
     }
 }
 
-double heuristic(const Vertex &current, const Vertex &goal)
+double heuristic(const Graph &graph, const Vertex &current, const Vertex &goal)
 {
-    return utils::computeHaversineDistance(current, goal);
+    // Match the local projection used for automatically generated edge weights.
+    return utils::computeEuclideanDistance(graph, current, goal);
 }
 
 void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goalVertexId)
@@ -257,7 +258,7 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
 
         distance[startVertexId] = 0.0;
         previous[startVertexId] = std::numeric_limits<uint32_t>::max();
-        pq.insert({heuristic(graph.getVertex(startVertexId), goalVertex), startVertexId});
+        pq.insert({heuristic(graph, graph.getVertex(startVertexId), goalVertex), startVertexId});
 
         while (!pq.empty())
         {
@@ -282,10 +283,10 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
                 if (g < distance[neighbor])
                 {
                     if (distance[neighbor] != std::numeric_limits<double>::infinity())
-                        pq.erase({distance[neighbor] + heuristic(graph.getVertex(neighbor), goalVertex), neighbor});
+                        pq.erase({distance[neighbor] + heuristic(graph, graph.getVertex(neighbor), goalVertex), neighbor});
                     distance[neighbor] = g;
                     previous[neighbor] = currentVertexId;
-                    double f = g + heuristic(graph.getVertex(neighbor), goalVertex);
+                    double f = g + heuristic(graph, graph.getVertex(neighbor), goalVertex);
                     pq.insert({f, neighbor});
                 }
             }
