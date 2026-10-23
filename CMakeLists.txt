@@ -14,9 +14,6 @@ set(SOURCES
     algorithms.cpp
 )
 
-# Specify the Qt6 installation path
-set(CMAKE_PREFIX_PATH "/usr/lib/qt6")
-
 # Find Qt6 Widgets
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
