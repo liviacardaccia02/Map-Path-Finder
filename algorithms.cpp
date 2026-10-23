@@ -232,11 +232,6 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
         std::cout << "Start and goal vertices are the same." << std::endl;
         return;
     }
-    else if (graph.getNeighbors(startVertexId).empty() || graph.getNeighbors(goalVertexId).empty())
-    {
-        std::cout << "Start or goal vertex has no neighbors in the graph." << std::endl;
-        return;
-    }
     else if (graph.getVertices().find(startVertexId) == graph.getVertices().end() || graph.getVertices().find(goalVertexId) == graph.getVertices().end())
     {
         std::cout << "Start or goal vertex not found in the graph." << std::endl;
