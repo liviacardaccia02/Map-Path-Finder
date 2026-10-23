@@ -10,6 +10,10 @@
 
 class Graph
 {
+protected:
+    // Allows derived graph types to initialize after their own members are ready.
+    Graph() = default;
+
 private:
     std::unordered_map<uint32_t, Vertex> vertices;
     std::unordered_map<uint32_t, std::vector<Edge>> adjacencyList;
