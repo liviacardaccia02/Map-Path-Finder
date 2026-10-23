@@ -11,7 +11,7 @@
 #include <QPointF>
 #include <QRectF>
 
-GraphicGraph::GraphicGraph(const std::string &filename, QGraphicsScene *scene) : Graph(filename), graphicsScene(scene),
+GraphicGraph::GraphicGraph(const std::string &filename, QGraphicsScene *scene) : Graph(), graphicsScene(scene),
                                                                                  minLon(std::numeric_limits<double>::max()), maxLon(std::numeric_limits<double>::lowest()),
                                                                                  minLat(std::numeric_limits<double>::max()), maxLat(std::numeric_limits<double>::lowest())
 {
@@ -62,8 +62,19 @@ void GraphicGraph::initializeFromFile(const std::string &filename)
         if (line.empty() || line[0] == '#')
             continue; // skip empty lines or comments
 
+        if (line.size() < 2 || line[1] != ',')
+        {
+            throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                     ": Expected a record beginning with 'V,' or 'E,'.\nLine content: " + line);
+        }
+
         std::string_view sv(line);
         char type = sv.front();
+        if (type != 'V' && type != 'E')
+        {
+            throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                     ": Unknown record type. Expected 'V' or 'E'.\nLine content: " + line);
+        }
         sv.remove_prefix(2); // remove "V," or "E,"
 
         if (type == 'V')

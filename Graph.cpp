@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdexcept>
+#include <cmath>
 
 Graph::Graph(const std::string &filename)
 {
@@ -32,8 +33,19 @@ void Graph::initializeFromFile(const std::string &filename)
         if (line.empty() || line[0] == '#')
             continue; // skip empty lines or comments
 
+        if (line.size() < 2 || line[1] != ',')
+        {
+            throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                     ": Expected a record beginning with 'V,' or 'E,'.\nLine content: " + line);
+        }
+
         std::string_view sv(line);
         char type = sv.front();
+        if (type != 'V' && type != 'E')
+        {
+            throw std::runtime_error("Parsing error at line " + std::to_string(lineNumber) +
+                                     ": Unknown record type. Expected 'V' or 'E'.\nLine content: " + line);
+        }
         sv.remove_prefix(2); // remove "V," or "E,"
 
         if (type == 'V')
@@ -109,6 +121,11 @@ void Graph::addVertex(const Vertex &vertex)
 
 void Graph::addEdge(const Edge &edge)
 {
+    if (!std::isfinite(edge.getWeight()) || edge.getWeight() < 0.0)
+    {
+        throw std::runtime_error("Edge weight must be finite and non-negative");
+    }
+
     uint32_t startId = edge.getStartId();
     uint32_t endId = edge.getEndId();
     if (vertices.find(startId) == vertices.end() || vertices.find(endId) == vertices.end())
