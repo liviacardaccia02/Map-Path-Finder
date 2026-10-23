@@ -7,6 +7,7 @@
 #include <set>
 #include <limits>
 #include <chrono>
+#include <cmath>
 
 void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVertexId)
 {
@@ -220,10 +221,15 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
     }
 }
 
-double heuristic(const Graph &graph, const Vertex &current, const Vertex &goal)
+double heuristic(double midLatitude, const Vertex &current, const Vertex &goal)
 {
     // Match the local projection used for automatically generated edge weights.
-    return utils::computeEuclideanDistance(graph, current, goal);
+    constexpr double metersPerDegree = 111000.0 * 0.88;
+    constexpr double pi = 3.14159265358979323846;
+    const double scaleX = metersPerDegree * std::cos(midLatitude * pi / 180.0);
+    const double dx = scaleX * (current.getLongitude() - goal.getLongitude());
+    const double dy = metersPerDegree * (current.getLatitude() - goal.getLatitude());
+    return std::sqrt(dx * dx + dy * dy);
 }
 
 void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goalVertexId)
@@ -249,6 +255,7 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
         std::set<std::pair<double, uint32_t>> pq;        // Min-heap priority queue {f(n), vertexId}
 
         const Vertex &goalVertex = graph.getVertex(goalVertexId);
+        const auto projectionCenter = utils::mediumPoint(graph);
 
         for (const auto &pair : graph.getVertices())
         {
@@ -258,7 +265,7 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
 
         distance[startVertexId] = 0.0;
         previous[startVertexId] = std::numeric_limits<uint32_t>::max();
-        pq.insert({heuristic(graph, graph.getVertex(startVertexId), goalVertex), startVertexId});
+        pq.insert({heuristic(projectionCenter.first, graph.getVertex(startVertexId), goalVertex), startVertexId});
 
         while (!pq.empty())
         {
@@ -283,10 +290,10 @@ void algorithms::aStar(const Graph &graph, uint32_t startVertexId, uint32_t goal
                 if (g < distance[neighbor])
                 {
                     if (distance[neighbor] != std::numeric_limits<double>::infinity())
-                        pq.erase({distance[neighbor] + heuristic(graph, graph.getVertex(neighbor), goalVertex), neighbor});
+                        pq.erase({distance[neighbor] + heuristic(projectionCenter.first, graph.getVertex(neighbor), goalVertex), neighbor});
                     distance[neighbor] = g;
                     previous[neighbor] = currentVertexId;
-                    double f = g + heuristic(graph, graph.getVertex(neighbor), goalVertex);
+                    double f = g + heuristic(projectionCenter.first, graph.getVertex(neighbor), goalVertex);
                     pq.insert({f, neighbor});
                 }
             }
