@@ -15,11 +15,6 @@ void algorithms::bfs(const Graph &graph, uint32_t startVertexId, uint32_t endVer
         std::cout << "Start and end vertices are the same." << std::endl;
         return;
     }
-    else if (graph.getNeighbors(startVertexId).empty() || graph.getNeighbors(endVertexId).empty())
-    {
-        std::cout << "Start or end vertex has no neighbors in the graph." << std::endl;
-        return;
-    }
     else if (graph.getVertices().find(startVertexId) == graph.getVertices().end() || graph.getVertices().find(endVertexId) == graph.getVertices().end())
     {
         std::cout << "Start or end vertex not found in the graph." << std::endl;
@@ -110,11 +105,6 @@ void algorithms::dijkstra(const Graph &graph, uint32_t startVertexId, uint32_t e
     if (startVertexId == endVertexId)
     {
         std::cout << "Start and end vertices are the same." << std::endl;
-        return;
-    }
-    else if (graph.getNeighbors(startVertexId).empty() || graph.getNeighbors(endVertexId).empty())
-    {
-        std::cout << "Start or end vertex has no neighbors in the graph." << std::endl;
         return;
     }
     else if (graph.getVertices().find(startVertexId) == graph.getVertices().end() || graph.getVertices().find(endVertexId) == graph.getVertices().end())
