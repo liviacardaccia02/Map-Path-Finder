@@ -130,7 +130,7 @@ BFS selects by edge count, so the displayed cumulative weight is the cost of the
 
 ## Tests
 
-The repository includes CLI smoke tests for all three algorithms finding a route whose destination is a sink vertex, plus a malformed-record parser check.
+The CLI regression suite checks sink destinations, BFS edge-count behavior versus weighted shortest paths, minimum-cost route selection by Dijkstra and A*, unreachable destinations, identical start/end vertices, and rejection of malformed records and invalid edge weights.
 
 After building, run:
 
@@ -138,7 +138,7 @@ After building, run:
 bash tests/smoke_test.sh ./build/graph_traversal
 ```
 
-A GitHub Actions workflow also configures and builds the project and runs these smoke tests on pushes and pull requests.
+A GitHub Actions workflow configures and builds the project and runs the CLI regression suite on pushes and pull requests.
 
 ## Implementation notes and limitations
 
@@ -146,7 +146,7 @@ A GitHub Actions workflow also configures and builds the project and runs these 
 - BFS optimizes edge count rather than weighted distance.
 - A*'s shortest-path guarantee depends on edge weights being compatible with its heuristic; arbitrary explicit weights may violate that assumption.
 - The GUI is optional at runtime but Qt 6 is currently a build dependency.
-- The smoke tests are focused regression checks, not exhaustive algorithm verification.
+- The CLI tests are focused regression checks, not exhaustive algorithm verification. They do not replace broader unit tests or property-based testing.
 - The input parser expects a simple comma-separated format; it is not a general CSV parser with quoted fields.
 
 ## Project structure
